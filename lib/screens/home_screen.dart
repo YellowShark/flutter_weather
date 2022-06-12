@@ -85,10 +85,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _getCurrentPosition() async {
-    final position = await _locationService.getCurrentPosition();
-    setState(() {
-      _position = position;
-    });
+    try {
+      setState(() async {
+        final position = await _locationService.getCurrentPosition();
+        _position = position;
+      });
+    } catch(e) {
+      print('Current position is not available now');
+      _changeCity('Moscow');
+    }
   }
 
   Future<void> _getCityAndWeatherFromLatLong() async {

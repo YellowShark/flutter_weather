@@ -5,14 +5,8 @@ import 'package:geolocator/geolocator.dart';
 
 class LocationService {
   Future<Position?> getCurrentPosition() async {
-    Position? position;
-    try {
-      await _checkPermissions();
-      position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-    } catch(e) {
-      print(e);
-    }
-    return position;
+    await _checkPermissions();
+    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
   }
 
   Future<void> _checkPermissions() async {
