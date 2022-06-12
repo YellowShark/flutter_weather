@@ -46,7 +46,7 @@ class _SearchFormState extends State<SearchForm> {
           Expanded(
             child: TextField(
               controller: _cityController,
-              decoration: const InputDecoration.collapsed(hintText: "Enter City"),
+              decoration: const InputDecoration.collapsed(hintText: 'Enter City'),
               onSubmitted: (String city) => widget.onSearch(city),
             ),
           ),

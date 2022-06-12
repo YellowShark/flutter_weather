@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
   );
 
   void _changeCity(String city) async {
-    var dataDecoded = await _weatherService.getWeatherByName(city);
+    final dataDecoded = await _weatherService.getWeatherByName(city);
     _updateData(dataDecoded);
     setState(() {
       _city = city;
@@ -97,11 +97,11 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_position == null) return;
     try {
       //get place name
-      List<Placemark> p = await placemarkFromCoordinates(_position!.latitude,_position!.longitude,);
-      debugPrint(jsonEncode(p));
-      Placemark place = p[0];
+      final possiblePlaces = await placemarkFromCoordinates(_position!.latitude,_position!.longitude,);
+      debugPrint(jsonEncode(possiblePlaces));
+      final place = possiblePlaces[0];
       //get weather info
-      var dataDecoded = await _weatherService.getWeatherByCoord(_position!.latitude, _position!.longitude);
+      final dataDecoded = await _weatherService.getWeatherByCoord(_position!.latitude, _position!.longitude);
       _updateData(dataDecoded);
       setState(() {
         _city = place.locality ?? '';
@@ -130,6 +130,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (temp > Consts.hotTemperature) return Colors.orange;
     if (temp > Consts.warmTemperature) return Colors.yellow;
     if (temp <= Consts.coldTemperature) return Colors.blue;
-    return Colors.green;
+    return Colors.white;
   }
 }
