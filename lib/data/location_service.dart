@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationService {
@@ -43,5 +46,11 @@ class LocationService {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
+  }
+
+  Future<Placemark> getPlace(Position position) async {
+    final possiblePlaces = await placemarkFromCoordinates(position.latitude, position.longitude,);
+    print(jsonEncode(possiblePlaces));
+    return possiblePlaces[0];
   }
 }

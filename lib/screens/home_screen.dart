@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/data/consts.dart';
 import 'package:flutter_weather/data/location_service.dart';
 import 'package:flutter_weather/data/weather_service.dart';
 import 'package:flutter_weather/screens/widgets/search_form.dart';
 import 'package:flutter_weather/screens/widgets/weather_card.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -51,27 +49,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget get _content => SingleChildScrollView(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SearchForm(onSearch: _changeCity),
-        Text(
-          _city,
-          style: const TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'OpenSans',
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SearchForm(onSearch: _changeCity),
+            Text(
+              _city,
+              style: const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'OpenSans',
+              ),
+            ),
+            if (_city != "")
+              WeatherCard(
+                title: _desc,
+                temperature: _temp,
+                iconCode: _icon,
+              )
+          ],
         ),
-        if (_city != "")
-          WeatherCard(
-            title: _desc,
-            temperature: _temp,
-            iconCode: _icon,
-          )
-      ],
-    ),
-  );
+      );
 
   void _changeCity(String city) async {
     final dataDecoded = await _weatherService.getWeatherByName(city);
@@ -96,12 +94,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _getCityAndWeatherFromLatLong() async {
     if (_position == null) return;
     try {
-      //get place name
-      final possiblePlaces = await placemarkFromCoordinates(_position!.latitude,_position!.longitude,);
-      debugPrint(jsonEncode(possiblePlaces));
-      final place = possiblePlaces[0];
+      final place = await _locationService.getPlace(_position!);
       //get weather info
-      final dataDecoded = await _weatherService.getWeatherByCoord(_position!.latitude, _position!.longitude);
+      final dataDecoded = await _weatherService.getWeatherByCoord(_position!);
       _updateData(dataDecoded);
       setState(() {
         _city = place.locality ?? '';
