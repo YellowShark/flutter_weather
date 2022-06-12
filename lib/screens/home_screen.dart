@@ -86,8 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _getCurrentPosition() async {
     try {
-      setState(() async {
-        final position = await _locationService.getCurrentPosition();
+      final position = await _locationService.getCurrentPosition();
+      setState(() {
         _position = position;
       });
     } catch(e) {
